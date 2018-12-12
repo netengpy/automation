@@ -1,10 +1,4 @@
-# ACI Learning Labs Code Samples
-This repository holds the code samples for the [DevNet](http://developer.cisco.com) Learning Labs for Application Centric Infrastructure.  This includes the following modules:
-
-* [Introduction to ACI Programmability](https://learninglabs.cisco.com/modules/intro-to-aci)
-  * Code Samples located in directory [sbx-intro-aci](sbx-intro-aci)
-* [Intermediate ACI Programmability](https://learninglabs.cisco.com/modules/intermediate-aci-prog)
-  * Code Samples located in directory [sbx-intermediate-aci](sbx-intermediate-aci)
+# ACI Learning Labs 
 
 ## Local Workstation Requirements
 The code samples in these labs all leverage Python as the programming language.  In order to run the exercises and code, you'll need to meet the following requirements.  
@@ -25,8 +19,8 @@ Also included in this repository are scripts to prepare the DevNet Always On San
 
 ```bash
 # Clone down this code repository & enter the setup directory
-git clone https://github.com/CiscoDevNet/aci-learning-labs-code-samples
-cd aci-learning-labs-code-samples/apic_fabric_setup
+git clone https://github.com/netengpy/aci-labs.git
+cd aci-labs/apic_fabric_setup
 
 # Run the baseline scripts
 python baseline.py
