@@ -1,0 +1,8 @@
+arya
+argparse
+cryptography
+requests
+
+sudo apt-get install python-dev graphviz libgraphviz-dev pkg-config
+sudo pip install pygraphviz
+sudo apt-get install python-pygraphviz
