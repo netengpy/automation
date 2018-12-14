@@ -1,0 +1,10 @@
+*.pyc
+*.egg-info
+.DS_STORE
+*.json
+*.csv
+.idea
+*.sqlite
+acitoolkit/
+dev/
+.gitignore
