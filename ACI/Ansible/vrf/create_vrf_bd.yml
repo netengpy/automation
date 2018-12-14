@@ -1,0 +1,31 @@
+---
+
+- name: playbook for creating bd
+  hosts: apic
+  connection: local
+  gather_facts: no
+  vars_files:
+    - external_vars.yml
+
+  tasks:
+  - name: Ensure VRF for tenant exists
+    aci_vrf:
+      vrf: "{{ vrf.name }}"
+      description: "{{ vrf.description }}"
+      tenant: "{{ vrf.tenant }}"
+      state: present
+      host: "{{ inventory_hostname }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      validate_certs: false
+
+  - name: Ensure Bridge Domain 1 exists
+    aci_bd:
+      bd: "{{ bd.name }}"
+      vrf: "{{ bd.vrf }}"
+      tenant: "{{ bd.tenant }}"
+      state: present
+      host: "{{ inventory_hostname }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      validate_certs: false

@@ -1,0 +1,72 @@
+---
+
+- name: Enable features
+  nxos_feature:
+    feature: interface-vlan
+    state: enabled
+    transport: nxapi
+
+- name: Ensure VLAN 10, 20, 30 exist
+  nxos_vlan:
+    vlan_id: "{{ item.id }}"
+    name: "{{ item.name }}"
+    transport: nxapi
+  with_items:
+    - { id: 10, name: web }
+    - { id: 20, name: app }
+    - { id: 30, name: db }
+
+- name: Admin up the VLAN interfaces
+  nxos_interface:
+    interface: "{{ item.name }}"
+    description: "{{ item.desc }}"
+    admin_state: up
+    transport: nxapi
+  with_items:
+    "{{ vlan_interfaces }}"
+
+- name: Set the physical ports descriptions
+  nxos_interface:
+    interface: "{{ item.name }}"
+    description: Web Vlan
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+  when:
+    - item.vlan == 10
+
+- name: Set the physical ports descriptions
+  nxos_interface:
+    interface: "{{ item.name }}"
+    description: App Vlan
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+  when:
+    - item.vlan == 20
+
+- name: Set the physical ports descriptions
+  nxos_interface:
+    interface: "{{ item.name }}"
+    description: DB Vlan
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+  when:
+    - item.vlan == 30
+
+- name: Set the physical interfaces eth1-15 as L2 ports
+  nxos_interface:
+    interface: "{{ item.name }}"
+    mode: layer2
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+
+- name: Admin up the physical interfaces
+  nxos_interface:
+    interface: "{{ item.name }}"
+    admin_state: up
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"

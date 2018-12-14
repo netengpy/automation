@@ -1,0 +1,32 @@
+---
+- name: VLAN creation Playbook
+  hosts: all                        # Execute the tasks on all the hosts defined in the inventory file
+  gather_facts: no
+
+  vars:                             # Define variables that will be used in this playbook
+    vlan20:
+      id: 20
+      name: app
+
+  vars_files:                       # Import variables defined in an external file
+    - external_vars.yml
+
+  tasks:
+
+  - name: Ensure VLAN 10 exists     # The configuration values are hardcoded in the script
+    nxos_vlan:
+      vlan_id: 10
+      name: web
+      transport: nxapi
+
+  - name: Ensure VLAN 20 exists     # The configuration values are defined within the playbook in the vars section
+    nxos_vlan:
+      vlan_id: "{{ vlan20.id }}"
+      name: "{{ vlan20.name }}"
+      transport: nxapi
+
+  - name: Ensure VLAN 30 exists     # The configuration values are imported from the external_vars file
+    nxos_vlan:
+      vlan_id: "{{ vlan30.id }}"
+      name: "{{ vlan30.name }}"
+      transport: nxapi

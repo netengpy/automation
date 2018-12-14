@@ -1,0 +1,66 @@
+---
+
+# Tasks which use the generic nxos_config module. The nxos_config module can be used to execute NXOS CLI commands
+# through Ansible, when the corresponding module for that specific command is not present. This enables the users to
+# leverage all the power that Ansible provides even when a module for a command is not developed yet.
+
+- name: Create private vlans
+  nxos_config:
+    lines:
+      - private-vlan isolated
+    parents: "vlan {{ item.private_vlan }}"
+    transport: nxapi
+  with_items:
+    "{{ vlans }}"
+
+- name: Associate private vlans with vlans
+  nxos_config:
+    lines:
+      - "private-vlan primary"
+      - "private-vlan association {{ item.private_vlan }}"
+    parents: "vlan {{ item.vlan }}"
+    transport: nxapi
+  with_items:
+    "{{ vlans }}"
+
+- name: Private vlan mapping with Vlan interfaces
+  nxos_config:
+    lines: "private-vlan mapping {{ item.private_vlan }}"
+    parents: "interface Vlan{{ item.vlan }}"
+    transport: nxapi
+  with_items:
+    "{{ vlans }}"
+
+- name: Associate private vlans with Physical interfaces
+  nxos_config:
+    lines: "switchport private-vlan host-association {{ item.vlan }} 101"
+    parents: "interface {{ item.name }}"
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+  when:
+    - item.vlan == 10
+
+- name: Associate private vlans with Physical interfaces
+  nxos_config:
+    lines:
+      - "switchport mode private-vlan host"
+      - "switchport private-vlan host-association {{ item.vlan }} 201"
+    parents: "interface {{ item.name }}"
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+  when:
+    - item.vlan == 20
+
+- name: Associate private vlans with Physical interfaces
+  nxos_config:
+    lines:
+      - "switchport mode private-vlan host"
+      - "switchport private-vlan host-association {{ item.vlan }} 301"
+    parents: "interface {{ item.name }}"
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+  when:
+    - item.vlan == 30

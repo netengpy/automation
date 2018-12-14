@@ -1,0 +1,20 @@
+---
+
+- name: playbook for creating contracts
+  hosts: apic
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: ensure contracts exist
+      aci_contract: 
+        name: "{{ item }}" 
+        tenant: ACILab 
+        host: "{{ inventory_hostname }}" 
+        username: "{{ user }}" 
+        password: "{{ pass }}" 
+        validate_certs: false
+      with_items:
+        - Web_Con
+        - App_Con
+        - DB_Con

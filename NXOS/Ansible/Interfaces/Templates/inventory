@@ -1,0 +1,6 @@
+nxosv1
+
+[all:vars]
+ansible_connection = local
+ansible_ssh_user = ansible
+ansible_ssh_pass = ansible

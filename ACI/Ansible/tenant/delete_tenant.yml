@@ -1,0 +1,17 @@
+---
+
+- name: playbook for testing tenants
+  hosts: apic
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - name: Delete a tenant
+    aci_tenant:
+      hostname: "{{ inventory_hostname }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      tenant: ACILab
+      description: Test tenant
+      state: absent
+      validate_certs: false

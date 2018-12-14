@@ -1,0 +1,9 @@
+---
+- name: Config playbook for both production and devtest environment
+  hosts: devtest:production
+  connection: local
+  gather_facts: no
+
+- import_playbook: common.yml
+- import_playbook: production.yml
+- import_playbook: devtest.yml

@@ -1,0 +1,7 @@
+---
+- name: Config playbook for production environment
+  hosts: production       # Run the playbook for only the production devices
+  connection: local
+  gather_facts: no
+  roles:
+  - production

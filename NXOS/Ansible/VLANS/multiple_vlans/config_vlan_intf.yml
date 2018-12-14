@@ -1,0 +1,26 @@
+---
+- name: VLAN Interface Configuration Playbook
+  hosts: all
+  gather_facts: no
+  vars_files:
+    - external_vars.yml
+
+  tasks:
+  - name: Admin up the VLAN interfaces      # The task will execute for each item defined under vlan_interfaces variable
+    nxos_interface:
+      interface: "{{ item.name }}"
+      description: "{{ item.desc }}"
+      admin_state: up
+      transport: nxapi
+    with_items:
+      "{{ vlan_interfaces }}"
+
+  - name: IPv4 Address configuration for the VLAN interfaces
+    nxos_ip_interface:
+      interface: "{{ item.name }}"
+      version: v4
+      addr: "{{ item.ipv4 }}"
+      mask: "{{ item.mask }}"
+      transport: nxapi
+    with_items:
+      "{{ vlan_interfaces }}"

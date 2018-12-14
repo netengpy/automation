@@ -1,0 +1,10 @@
+---
+vrf:
+  name: ACILab_VRF
+  description: A sample VRF used for ACILab
+  tenant: ACILab
+
+bd:
+  name: ACILab_BD1
+  vrf: ACILab_VRF
+  tenant: ACILab

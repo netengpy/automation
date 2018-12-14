@@ -1,0 +1,19 @@
+---
+- name: Interface Configuration Playbook
+  hosts: all
+  gather_facts: no
+  vars:
+    interface: Vlan10
+
+  tasks:
+  - name: Get interface details         # Fetch Vlan10 interface details and store it in interface_facts variable
+    nxos_command:
+      commands: "show ip interface {{ interface }}"
+      transport: nxapi
+    register: interface_facts
+
+  # Parse through the JSON and store only the interface related information in fmt_int variable
+  - set_fact: fmt_int="{{ interface_facts.stdout[0].TABLE_intf.ROW_intf }}"
+
+  # Create a new file using the intf_template.j2 template and substituting the variable values
+  - template: src=./intf_template.j2 dest=./intf-{{inventory_hostname}}.txt

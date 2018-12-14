@@ -1,0 +1,37 @@
+---
+- name: Playbook for setting interface descriptions
+  hosts: all
+  gather_facts: no
+  vars_files:
+    - external_vars.yml
+
+  tasks:
+  - name: Set the physical ports descriptions for Web interfaces
+    nxos_interface:
+      interface: "{{ item.name }}"
+      description: Web Vlan
+      transport: nxapi
+    with_items:                       # This task will execute for each item defined under physical_interfaces variable
+      "{{ physical_interfaces }}"     # only when the vlan value of each item defined is 10.
+    when:
+      - item.vlan == 10
+
+  - name: Set the physical ports descriptions for App interfaces
+    nxos_interface:
+      interface: "{{ item.name }}"
+      description: App Vlan
+      transport: nxapi
+    with_items:
+      "{{ physical_interfaces }}"
+    when:
+      - item.vlan == 20
+
+  - name: Set the physical ports descriptions for DB interfaces
+    nxos_interface:
+      interface: "{{ item.name }}"
+      description: DB Vlan
+      transport: nxapi
+    with_items:
+      "{{ physical_interfaces }}"
+    when:
+      - item.vlan == 30

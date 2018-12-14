@@ -1,0 +1,29 @@
+---
+
+- name: Set the switchport trunk allowed vlan on all physical interfaces
+  nxos_switchport:
+    interface: "{{ item.name }}"
+    mode: trunk
+    trunk_allowed_vlans: "1-4094"
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+
+- name: Set the switchport access vlan
+  nxos_switchport:
+    interface: "{{ item.name }}"
+    mode: access
+    access_vlan: "{{ item.vlan }}"
+    transport: nxapi
+  with_items:
+    "{{ physical_interfaces }}"
+
+- name: IPv4 Address configuration for the VLAN interfaces
+  nxos_ip_interface:
+    interface: "{{ item.name }}"
+    version: v4
+    addr: "{{ item.ipv4 }}"
+    mask: 24
+    transport: nxapi
+  with_items:
+    "{{ vlan_interfaces }}"

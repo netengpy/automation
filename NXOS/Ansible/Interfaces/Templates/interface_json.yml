@@ -1,0 +1,14 @@
+---
+- name: Playbook for getting the Vlan10 interface details in the JSON format
+  hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: Get interface details         # Fetch Vlan10 interface details and store it in interface_facts variable
+    nxos_command:
+      commands: "show ip interface Vlan10"
+      transport: nxapi
+    register: interface_facts
+
+  # Copy the contents of the interface_facts variable into a json file
+  - local_action: copy content={{ interface_facts }} dest=./intf-{{inventory_hostname}}.json

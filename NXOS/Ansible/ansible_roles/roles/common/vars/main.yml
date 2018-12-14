@@ -1,0 +1,6 @@
+---
+
+vlan_interfaces:
+  - { name: Vlan10, desc: Web VLAN }
+  - { name: Vlan20, desc: App VLAN }
+  - { name: Vlan30, desc: DB VLAN  }

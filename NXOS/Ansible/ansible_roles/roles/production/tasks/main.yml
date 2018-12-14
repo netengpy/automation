@@ -1,0 +1,119 @@
+---
+
+- name: Enable feature private-vlan
+  nxos_feature:
+    feature: private-vlan
+    state: enabled
+    transport: nxapi
+
+- name: Create VRFs
+  nxos_vrf:
+    vrf: "{{ item }}"
+    state: present
+    transport: nxapi
+  with_items:
+    - App
+    - Web
+    - DB
+
+- import_tasks: private_vlan.yml            # Import the tasks defined in the private_vlan.yml file
+
+- name: Create static routes associated with the VRFs
+  nxos_static_route:
+    prefix: "{{ item.dest }}"
+    next_hop: "{{ item.next_hop }}"
+    vrf: "{{ item.vrf }}"
+    transport: nxapi
+  with_items:
+    "{{ vrf_iproutes }}"
+
+- name: Create IP Access List
+  nxos_acl:
+    name: web_acl
+    seq: 10
+    action: permit
+    proto: tcp
+    src: any
+    dest: 10.1.1.0/24
+    state: present
+    transport: nxapi
+
+- name: Apply ACL on  Web VLAN
+  nxos_acl_interface:
+    name: web_acl
+    interface: Vlan10
+    direction: ingress
+    state: present
+    transport: nxapi
+
+- name: Ensure respective VRFs exist on Vlan interfaces
+  nxos_vrf_interface:
+    vrf: "{{ item.vrf }}"
+    interface: "Vlan{{ item.vlan }}"
+    state: present
+    transport: nxapi
+  with_items:
+    "{{ vlans }}"
+
+- name: IPv4 Address configuration for the VLAN interfaces
+  nxos_ip_interface:
+    interface: "Vlan{{ item.vlan }}"
+    version: v4
+    addr: "{{ item.ipv4 }}"
+    mask: "{{ item.mask }}"
+    transport: nxapi
+  with_items:
+    "{{ vlans }}"
+
+- name: Set the physical ports descriptions
+  nxos_interface:
+    interface: "{{ item.name }}"
+    description: "{{ item.desc }}"
+    transport: nxapi
+  with_items:
+    - "{{ fw_connected_interfaces }}"
+    - "{{ lb_connected_interfaces }}"
+    - "{{ internet_conn_interfaces }}"
+
+- name: Ensure interfaces are Layer 3 ports before configuring VRF
+  nxos_interface:
+    interface: "{{ item.name }}"
+    mode: layer3
+    transport: nxapi
+  with_items:
+    - "{{ fw_connected_interfaces }}"
+    - "{{ lb_connected_interfaces }}"
+    - "{{ internet_conn_interfaces }}"
+
+- name: Ensure respective vrf exists on Physical interfaces
+  nxos_vrf_interface:
+    vrf: "{{ item.vrf }}"
+    interface: "{{ item.name }}"
+    state: present
+    transport: nxapi
+  with_items:
+    - "{{ fw_connected_interfaces }}"
+    - "{{ lb_connected_interfaces }}"
+    - "{{ internet_conn_interfaces }}"
+
+- name: IPv4 Address configuration for the physical interfaces
+  nxos_ip_interface:
+    interface: "{{ item.name }}"
+    version: v4
+    addr: "{{ item.ipv4 }}"
+    mask: "{{ item.mask }}"
+    transport: nxapi
+  with_items:
+    - "{{ fw_connected_interfaces }}"
+    - "{{ lb_connected_interfaces }}"
+    - "{{ internet_conn_interfaces }}"
+
+- name: Admin up the physical interfaces
+  nxos_interface:
+    interface: "{{ item.name }}"
+    admin_state: up
+    transport: nxapi
+  with_items:
+    - "{{ fw_connected_interfaces }}"
+    - "{{ lb_connected_interfaces }}"
+    - "{{ internet_conn_interfaces }}"

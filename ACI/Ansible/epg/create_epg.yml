@@ -1,0 +1,31 @@
+---
+
+- name: playbook for creating bd
+  hosts: apic
+  connection: local
+  gather_facts: no
+  vars_files:
+    - external_vars.yml
+
+  tasks:
+  - name: create app network profile
+    aci_ap:
+      ap: "{{ ap }}"
+      tenant: "{{ tenant }}"
+      state: present
+      hostname: "{{ inventory_hostname }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      validate_certs: false
+
+  - name: ensure web epg exists
+    aci_epg:
+      epg: "{{ epg }}"
+      bd: "{{ bd }}"
+      ap: "{{ ap }}"
+      tenant: "{{ tenant }}"
+      state: present
+      hostname: "{{ inventory_hostname }}"
+      username: "{{ user }}"
+      password: "{{ pass }}"
+      validate_certs: false
