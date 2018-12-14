@@ -1,0 +1,53 @@
+arya
+argparse
+cryptography
+requests
+
+===================================================================================
+acitoolkit - diagram.py
+
+sudo apt-get install python-dev graphviz libgraphviz-dev pkg-config
+sudo pip install pygraphviz
+sudo apt-get install python-pygraphviz
+
+===================================================================================
+
+Ubuntu Sample Setup Instructions Example
+
+    Standard Development Tools
+
+    sudo apt-get install build-essential
+
+    Python 2.7
+
+    wget https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tgz
+    tar xzf Python-2.7.13.tgz
+    cd Python-2.7.13
+    ./configure  --prefix=/usr/local --enable-unicode=ucs4
+    make altinstall
+    sudo apt-get install python-pip -y
+    sudo pip install virtualenv   
+
+    OpenSSL Development Library
+
+    sudo apt -y install libssl-dev
+
+
+#From your working directory
+git clone https://github.com/netengpy/aci-labs
+cd aci-labs
+virtualenv venv --python=python2.7
+source venv/bin/activate
+pip install -r requirements.txt
+
+
+- Install ACI Toolkit
+
+# From your working directory
+git clone https://github.com/datacenter/acitoolkit.git
+cd acitoolkit
+python setup.py install
+
+
+- Install Cobra SDK
+http[s]://[APIC address]/cobra/_downloads/
