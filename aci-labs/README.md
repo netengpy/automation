@@ -1,4 +1,8 @@
-# ACI Learning Labs 
+# ACI Learning Labs
+
+
+## Download acitoolkit
+https://github.com/datacenter/acitoolkit
 
 ## Local Workstation Requirements
 The code samples in these labs all leverage Python as the programming language.  In order to run the exercises and code, you'll need to meet the following requirements.  
