@@ -1,0 +1,32 @@
+omz@ansible:~/netengpy/IOS/Ansible/add_vlan
+$ tree 
+.
+├── ansible.cfg
+├── CFGS
+│   └── 172.16.100.26.txt
+├── myhosts
+├── password.yml
+├── Readme
+├── roles
+│   └── add_vlan
+│       ├── backup
+│       ├── tasks
+│       │   └── main.yml
+│       ├── templates
+│       │   └── vlan.j2
+│       └── vars
+│           └── main.yml
+└── site.yml
+
+7 directories, 9 files
+omz@ansible:~/netengpy/IOS/Ansible/add_vlan
+$ 
+
+
+- Put device IPs in the myhosts files
+- Put variables used to generate final config in the vars/main.yml file
+- Template used to generate the config is in the /templates/vlan.j2 file
+- Configs are generated in the CFG folder
+
+# Comment out sections in the site.yml file to only generate the config
+# Uncomment to push the config to the device

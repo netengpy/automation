@@ -1,0 +1,4 @@
+vlan 10
+name OFFICE
+exit
+

@@ -25,38 +25,21 @@ def main():
 
 
 def subscribe_to_events(session):
-    Tenant.subscribe(session, only_new=True)
-    AppProfile.subscribe(session, only_new=True)
-    EPG.subscribe(session, only_new=True)
-
+    Interface.subscribe(session, only_new=True)
+  
     while True:
-        if Tenant.has_events(session):
-            event = Tenant.get_event(session)
-            if event.is_deleted():
-                status = "has been deleted"
+        if Interface.has_events(session):
+            print '<<<<><><><><><><><><><><><><><><><><><>'
+            event = Interface.get_event(session) 
+            if len(event) == 0:
+                print 'NNNNOOOO EVENTS'
             else:
-                status = "has been created/modified"
+                print event
+        
 
-            post_message_to_spark("{} {}".format(event.dn, status))
+            post_message_to_spark("{}".format(event))
 
-        elif AppProfile.has_events(session):
-            event = AppProfile.get_event(session)
-            if event.is_deleted():
-                status = "has been deleted"
-            else:
-                status = "has been created/modified"
-
-            post_message_to_spark("{} {}".format(event.dn, status))
-
-        elif EPG.has_events(session):
-            event = EPG.get_event(session)
-            if event.is_deleted():
-                status = "has been deleted"
-            else:
-                status = "has been created/modified"
-
-            post_message_to_spark("{} {}".format(event.dn, status))
-
+    
 
 def post_message_to_spark(message):
     header = {"Authorization": TOKEN, "Content-Type": "application/json"}

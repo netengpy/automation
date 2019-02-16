@@ -1,0 +1,24 @@
+---
+- hosts: Cisco_IOS
+  gather_facts: no
+  connection: local
+
+  tasks:
+  - name: Getting credentials...
+    include_vars: password.yml
+
+  - name: Creating connection...
+    set_fact:
+      provider:
+        host: "{{ inventory_hostname }}"
+        username: "{{ creds['username'] }}"
+        password: "{{ creds['password'] }}"
+        auth_pass: "{{ creds['auth_pass'] }}"
+
+  - name: Show hostanme
+    ios_command:
+      provider: "{{ provider }}"
+      commands:
+        - show run | i hostname 
+    register: hostname
+  - debug: var=hostname.stdout_lines
